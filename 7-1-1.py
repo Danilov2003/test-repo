@@ -98,6 +98,8 @@ try:
         outfile.write(str(len(measure_data))) 
         outfile.write("\n  частота измерений=") 
         outfile.write(str(fm)) 
+        outfile.write("\n шаг напряжения=")
+        outfile.write(str(3.3/255))
     plt.plot(measure_data)
     plt.show()
 
