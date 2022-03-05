@@ -1,0 +1,48 @@
+
+#include <iostream>
+
+
+class MoneyBox {
+private:
+    unsigned int coins;
+    unsigned int sum;
+
+public:
+    // Конструктор и деструктор, если нужны
+    MoneyBox() {
+        coins = 0;
+        sum = 0;
+    };
+
+    // Добавить монетку достоинством value
+    void addCoin(unsigned int value) {
+        coins++;
+        sum += value;
+    }
+
+    // Получить текущее количество монеток в копилке
+    unsigned int getCoinsNumber() const {
+        return coins;
+    }
+
+    // Получить текущее общее достоинство всех монеток
+    unsigned int getCoinsValue() const {
+        return sum;
+    }
+};
+//Для тестирования можете использовать следующий базовый пример:
+
+int main() {
+    MoneyBox m;
+// Добавили монетку достоинством 10
+    m.addCoin(10);
+// Добавили монетку достоинством 5
+    m.addCoin(5);
+
+// Ожидаем, что монеток внутри 2 штуки
+    std::cout << m.getCoinsNumber() << std::endl;
+// Ожидаем, что общее достоинство всех монеток 15
+    std::cout << m.getCoinsValue() << std::endl;
+
+    return 0;
+}
