@@ -1,0 +1,207 @@
+
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <random>
+#include <ctime>
+#include <chrono>
+#include <numeric>
+#include <iterator>
+
+void print ( std::vector<int> &v) {
+    for (int i = 0; i < v.size(); i++) {
+        std::cout << v[i] << std::endl;
+    };
+}
+
+bool IsOdd (int i) {
+    return ((i%2)==1);
+}
+
+bool Simple (int i) {
+    int capacity = 0;
+    if (i > 1) {
+        for (int k = 2; k <= sqrt(i); k++) {
+            if ((i % k) == 0) capacity++;
+        }
+        if (capacity == 0) return true;
+        else return false;
+    }
+    if (i <= 1) return false;
+}
+
+int Square (int i){
+    return i*i;
+}
+
+bool Nothing (int i) {
+    return true;
+}
+
+int difference (int a, int b) {
+    return a - b;
+}
+
+bool Plustable (int a) {
+    return a < 0;
+}
+
+int main() {
+    system("chcp 65001");
+
+    //Создаем последовательность П1 натуральных числе от 1 до 10
+    std::vector<int> nums {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    std::cout << "Последовательность П1 натуральных числе от 1 до 10" << std::endl;
+    print(nums);
+
+    //Добавление в последовательность двух чисел
+    int a1, a2;
+    std::cout << "Введите два целых числа:";
+    std::cin >> a1 >> a2;
+    nums.push_back(a1);
+    nums.push_back(a2);
+    //Перемешивание последовательности в рандомном порядке
+
+    srand(time(NULL));
+    std::random_shuffle(nums.begin(), nums.end());
+
+    //Альтернативный способ перемешивания (пример из документации)
+
+    //std::random_device rd;
+    //std::mt19937 g(rd());
+    //std::shuffle(nums.begin(), nums.end(), g);
+
+    std::cout << "П1 после перемешивания: " << std::endl;
+    print(nums);
+    std::cout<< std::endl;
+
+    //Удаляем дубликаты из последовательности
+
+    std::sort(nums.begin(), nums.end());
+    auto ip = std::unique(nums.begin(), nums.end());
+    for (;ip != nums.end();) {
+    nums.resize(std::distance(nums.begin(), ip));
+    auto ip = std::unique(nums.begin(), nums.end());
+    };
+    nums.resize(std::distance(nums.begin(), ip));
+    //Альтернативный способ удаления дубликатов в конце вектора -- примнить метод erase
+    //nums.erase(ip, nums.end());
+
+    std::cout << "П1 после удаления дубликатов: " << std::endl;
+    print(nums);
+
+    //Подсчитаем количество нечетных чисел
+
+    int mycount = std::count_if(nums.begin(), nums.end(), IsOdd);
+    std::cout << "Количество нечетных чисел в П1: " << mycount << std::endl;
+
+    //Найдем максимальное и минимальное число в последовательности
+    auto max_element = std::max_element(nums.begin(), nums.end());
+    auto min_element = std::min_element(nums.begin(), nums.end());
+    std::cout  << "Максимальный элемент П1: " << *max_element << std::endl;
+    std::cout  << "Минимальный элемент П1: " << *min_element << std::endl;
+
+    //Поиск хотя бы одного простого числа
+    auto Simple_element = nums.begin();
+    for (int i = 0; i < nums.size() - 1; i++) {
+        auto simple_element = std::find_if(nums.begin() + i, nums.begin() + (i + 1), Simple);
+        Simple_element = simple_element;
+    }
+    std::cout << "Простое число из П1: " << *Simple_element << std::endl;
+
+    //Заменяем числа в последовательности квадратами
+    std::vector<int> new_nums(nums.size());
+    std::transform(nums.begin(), nums.end(), new_nums.begin(), Square);
+    std::cout << "Последовательность П1 квадратов: " << std::endl;
+    for (int i = 0; i < new_nums.size(); i++) {
+        std::cout << new_nums[i] << std::endl;
+        nums[i] = new_nums[i];
+    };
+
+
+    //Создание последовательности рандомных чисел
+    auto current_time = std::chrono::steady_clock::now().time_since_epoch().count() / static_cast<unsigned long long>(1e9);
+    auto generator = std::mt19937_64(current_time);
+    int size1 = nums.size();
+    auto distribution = std::uniform_int_distribution(0, size1);
+
+    std::cout << "Новая последовательность П2 рандомных чисел: " << std::endl;
+    for (int i = 0; i < new_nums.size(); i++) {
+        new_nums[i] = distribution(generator);
+        std::cout << new_nums[i] << std::endl;
+
+    }
+
+    //Сумма последовательности 2
+    std::cout << "Сумма элементов П2: " << std::endl <<
+    std::accumulate(new_nums.begin(), new_nums.end(), 0) << std::endl;
+
+    //Заменяем первые несколько чисел в последовательности 2 единицами
+    std::replace_if(new_nums.begin(), new_nums.begin() + 3, Nothing ,1);
+    std::cout << "П2 после замены первых трёх элементов на единицу: " << std::endl;
+    print(new_nums);
+
+    //Создаем П3 как разность П1 и П2
+    std::vector<int> nums_3 (nums.size());
+    std::transform(nums.begin(), nums.end(), new_nums.begin(), nums_3.begin(), difference);
+    std::cout << "П3 как разность П1 и П2: " << std::endl;
+    print(nums_3);
+
+    nums_3[6] = 0;
+    nums_3[7] = 0;
+
+    //Заменяем каждый отрицательный элемент в П3 нулем
+    std::replace_if(nums_3.begin(), nums_3.end(), Plustable, 0);
+    std::cout << "П3 после замены отрицательных элементов на ноль: " << std::endl;
+    print(nums_3);
+
+    //Удаляем все нули в П3
+    auto it = std::remove(nums_3.begin(), nums_3.end(), 0);
+    nums_3.erase(it, nums_3.end());
+    std::cout << "Удаляем все нули в П3: " << std::endl;
+    print(nums_3);
+
+    //Заменяем порядок чисел в П3 на обратный
+    std::reverse(nums_3.begin(), nums_3.end());
+    std::cout << "П3 в обратном порядке: " << std::endl;
+    print(nums_3);
+
+    //Определяем ТОП3 самых больших элементов
+    std::nth_element(nums_3.begin(), nums_3.end() - 4, nums_3.end());
+    std::cout << "ТОП3 самых больших элементов в П3: " << std::endl;
+    for (auto i = nums_3.end() - 1; i > nums_3.end() - 4; --i) {
+        std::cout  << *i << std::endl;
+    }
+
+    //Сортируем П1 и П2 по возрастанию
+    std::sort(nums.begin(), nums.end());
+    std::sort(new_nums.begin(),new_nums.end());
+    std::cout << "П1 отсортированная по возрастанию" << std::endl;
+    print(nums);
+    std::cout << "П2 отсортированная по возрастанию" << std::endl;
+    print(new_nums);
+
+    //Создаем П4 и сливаем туда П1 и П2
+    std::vector<int> nums_4 (nums.size() + new_nums.size());
+    std::merge(nums.begin(), nums.end(), new_nums.begin(), new_nums.end(), nums_4.begin());
+    std::cout << "П4 - слияние П1 и П2: "  << std::endl;
+    print(nums_4);
+
+    //Определяем диапазон для упорядоченной вставки числа 1 в П4
+    std::pair<std::vector<int>::iterator,std::vector<int>::iterator> bounds;
+    bounds=std::equal_range (nums_4.begin(), nums_4.end(), 1);
+    // Получили итератор на первую единицу из П4 и итератор на следующий за последней единицей элемент в П4
+
+    //Выводим в консоль все последовательности
+    std::cout << "П1: " << std::endl;
+    print(nums);
+    std::cout << "П2: " << std::endl;
+    print(new_nums);
+    std::cout << "П3: " << std::endl;
+    print(nums_3);
+    std::cout << "П4: " << std::endl;
+    print(nums_4);
+
+    return 0;
+}
