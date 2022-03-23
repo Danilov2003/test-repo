@@ -19,16 +19,16 @@ bool IsOdd (int i) {
     return ((i%2)==1);
 }
 
-bool Simple (int i) {
-    int capacity = 0;
-    if (i > 1) {
-        for (int k = 2; k <= sqrt(i); k++) {
-            if ((i % k) == 0) capacity++;
+
+bool IsSimple (int a) {
+    if(a > 1){
+        int capacity = 0;
+        for (int i = 2; i <= sqrt(a); i++) {
+            if ((a%i)==0) capacity++;
         }
         if (capacity == 0) return true;
-        else return false;
     }
-    if (i <= 1) return false;
+    else return false;
 }
 
 int Square (int i){
@@ -103,12 +103,8 @@ int main() {
     std::cout  << "Минимальный элемент П1: " << *min_element << std::endl;
 
     //Поиск хотя бы одного простого числа
-    auto Simple_element = nums.begin();
-    for (int i = 0; i < nums.size() - 1; i++) {
-        auto simple_element = std::find_if(nums.begin() + i, nums.begin() + (i + 1), Simple);
-        Simple_element = simple_element;
-    }
-    std::cout << "Простое число из П1: " << *Simple_element << std::endl;
+    auto simple_element = std::find_if(nums.begin(), nums.end(), IsSimple);
+    std::cout << "Простое число из П1: " << *simple_element << std::endl;
 
     //Заменяем числа в последовательности квадратами
     std::vector<int> new_nums(nums.size());
