@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include <numeric>
 #include <vector>
@@ -19,12 +18,14 @@ void accumulate_wrapper(Iterator begin, Iterator end, T init, T& result) {
     result = std::accumulate(begin, end, init);
 }
 
-template <typename Iterator, typename T>
-T parallel_accumulate(Iterator begin, Iterator end, T init) {
+template <typename Iterator, typename T, typename A>
+T parallel_accumulate(Iterator begin, Iterator end, T init, A workers) {
     // Размер диапазона
     auto size = std::distance(begin, end);
     // Количество исполнителей
+    auto hard_workers = std::thread::hardware_concurrency();
     auto num_workers = std::thread::hardware_concurrency();
+    if (hard_workers > workers) num_workers = workers;
     // Проверяем, нужно ли распараллеливать
     if (size < num_workers * 4) {
         return std::accumulate(begin, end, init);
@@ -67,7 +68,7 @@ int main () {
     std::iota(std::begin(sequence), std::end(sequence), 0);
     std::cout << parallel_accumulate(std::begin(sequence),
                                      std::end(sequence),
-                                     0);
+                                     0, 5);
 
     // TODO: Сгенерируйте вектор случайных чисел,
     // используя инструментарий из библиотеки random,
@@ -91,7 +92,7 @@ int main () {
     std::cout << "Cумма последовательности рандомных чисел: ";
     std::cout << parallel_accumulate(std::begin(new_nums),
                                      std::end(new_nums),
-                                     0);
+                                     0, 4);
 
 
     return 0;
