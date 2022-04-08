@@ -62,13 +62,16 @@ T parallel_accumulate(Iterator begin, Iterator end, T init, A workers) {
 int main () {
     system("chcp 65001");
 
+    int workers;
+    std::cout << "Введите количество исполнителей:" << std::endl;
+    std::cin >> workers;
 // Считаем сумму чисел от 0 до 99
     std::cout << "Cумма чисел от 0 до 99: ";
     std::vector<int> sequence(100);
     std::iota(std::begin(sequence), std::end(sequence), 0);
     std::cout << parallel_accumulate(std::begin(sequence),
                                      std::end(sequence),
-                                     0, 5);
+                                     0, workers);
 
     // TODO: Сгенерируйте вектор случайных чисел,
     // используя инструментарий из библиотеки random,
@@ -92,8 +95,6 @@ int main () {
     std::cout << "Cумма последовательности рандомных чисел: ";
     std::cout << parallel_accumulate(std::begin(new_nums),
                                      std::end(new_nums),
-                                     0, 4);
-
-
+                                     0, workers);
     return 0;
 }
