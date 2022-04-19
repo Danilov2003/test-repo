@@ -61,9 +61,6 @@ public:
      * Alex 7
      * Anny 5
      */
-    /*bool sorting (const std::pair<std::string, unsigned>& the_one, const std::pair<std::string, unsigned>& the_two){
-        return 1;
-    }*/
     void print_standings() const {
         std::vector<std::pair<std::string, unsigned>> vec;
         for (auto it = AllStudents.begin(); it != AllStudents.end(); ++it) {
@@ -73,11 +70,7 @@ public:
                   [](const std::pair<std::string, unsigned>& the_one,
                      const std::pair<std::string, unsigned>& the_two)
                   {return the_one.second > the_two.second;});
-        //std::sort(AllStudents.begin(), AllStudents.end());
-        /*std::sort(AllStudents.begin(), AllStudents.end(),
-                  [](const std::pair<std::string, unsigned>& the_one,
-                          const std::pair<std::string, unsigned>& the_two)
-                  {return the_one.second < the_two.second;});*/
+        
         for (auto it = vec.begin(); it != vec.end(); ++it) {
             std::cout << it->first << " " << it->second << std::endl;
         }
