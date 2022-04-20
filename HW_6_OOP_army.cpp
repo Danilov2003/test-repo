@@ -69,8 +69,9 @@ public:
         std::sort(vec.begin(), vec.end(),
                   [](const std::pair<std::string, unsigned>& the_one,
                      const std::pair<std::string, unsigned>& the_two)
-                  {return the_one.second > the_two.second;});
-        
+                  {if (the_one.second != the_two.second) return the_one.second > the_two.second;
+                      else return the_one.first < the_two.first;});
+
         for (auto it = vec.begin(); it != vec.end(); ++it) {
             std::cout << it->first << " " << it->second << std::endl;
         }
@@ -110,7 +111,7 @@ int main() {
     rh.update("Alex", 6);
     rh.update("Anny", 5);
     rh.update("Ivan", 10);
-    rh.update("Anastasia", 9);
+    rh.update("Anastasia", 10);
     rh.update("Johnny", 1);
     rh.update("Alex", 7); // Апелляция у Alex, оценка обновляется
     rh.update("Nikita", 8);
